@@ -8,9 +8,5 @@ export default function DorgWarp(props) {
     item: { type: 'drop', label, itemType },
     type: 'drop',
   });
-  return (
-    <div className="" ref={drag}>
-      {props.children}
-    </div>
-  );
+  return <div ref={drag}>{props.children}</div>;
 }

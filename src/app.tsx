@@ -9,7 +9,7 @@ import defaultSettings from '../config/defaultSettings';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
-
+import 'antd/dist/antd.css';
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
 
