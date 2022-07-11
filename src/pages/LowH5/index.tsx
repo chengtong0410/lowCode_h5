@@ -1,21 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import BaseDorp from './conponents/BaseDorp';
 import BaseSeting from './conponents/BaseSeting';
 import { useDrop, useDrag } from 'react-dnd';
 import { Input, Button } from 'antd';
+import DordCardItem from './conponents/DordCardItem';
 import styles from './index.less';
 
 const LowWarp: React.FC = () => {
   const [list, setList] = useState([]);
   const [srcString, setSrcString] = useState('');
+  const [selectItem, setSelectItem] = useState('');
   const [urlIpt, setUrlIpt] = useState('https://frontend-cdn.henhenchina.com/image/starWorker.jpg');
 
-  const [{ isOver, isOverCurrent }, drop] = useDrop({
+  const [{ isOver, canDrop }, drop] = useDrop({
     accept: 'drop',
     drop(item, monitor) {
-      setList([...list, item]);
+      if (!item.select) {
+        setList([...list, item]);
+      } else {
+        console.log('🚀 ~ file: index.tsx ~ line 17 ~ drop ~ item', item);
+        setSelectItem(item);
+      }
     },
     hover(item, monitor) {},
+    collect: (monitor) => ({
+      isOver: !!monitor.isOver(),
+      canDrop: !!monitor.canDrop(),
+    }),
   });
   const handleUrlTextChange = (e) => {
     setUrlIpt(e.target.value);
@@ -25,7 +36,21 @@ const LowWarp: React.FC = () => {
   };
   const handleClearImgSrc = () => {
     setSrcString('');
+    setList([]);
   };
+  const handleEnd = (e) => {
+    console.log(selectItem);
+
+    console.log('🚀 ~ file: index.tsx ~ line 38 ~ handleEnd ~ e', e);
+  };
+  useEffect(() => {
+    window.addEventListener('mouseup', () => {
+      console.log(22221);
+    });
+
+    return () => {};
+  }, []);
+
   return (
     <div className={styles.container}>
       <div className={styles['img-url']}>
@@ -35,7 +60,7 @@ const LowWarp: React.FC = () => {
           onInput={handleUrlTextChange}
           placeholder="请输入图片URL"
         />
-        <Button type="primary" onClick={handleAddImgSrc}>
+        <Button className={styles['add-btn']} type="primary" onClick={handleAddImgSrc}>
           添加图片
         </Button>
         <Button type="primary" onClick={handleClearImgSrc}>
@@ -48,7 +73,11 @@ const LowWarp: React.FC = () => {
           {srcString && <img className="img-warp" src={srcString} alt="" />}
           <div className={styles['drop-warp']}>
             {list.map((l, i) => (
-              <div key={l.label + i}>{l.label}</div>
+              <div key={l.label + i} onDragEnd={handleEnd}>
+                <DordCardItem>
+                  <div className={styles['list-item']}>{l.label}</div>
+                </DordCardItem>
+              </div>
             ))}
           </div>
         </div>

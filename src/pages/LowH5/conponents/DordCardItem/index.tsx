@@ -5,13 +5,13 @@ export default function DorgWarp(props) {
   const { label, itemType } = props;
 
   const [{ isDragging }, drag, preview] = useDrag({
-    item: { type: 'drop', label, itemType },
+    item: { type: 'drop', label, itemType, select: true },
     type: 'drop',
   });
 
   return (
     <>
-      <DragPreviewImage connect={preview} src={second} />
+      {/* <DragPreviewImage connect={preview} src={second} /> */}
       <div ref={drag}>{props.children}</div>
     </>
   );
